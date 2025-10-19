@@ -55,56 +55,62 @@
 
         /* NAV - floating logo -> expand horizontal menu */
         .nav-toggle-container {
-        position: fixed;
-        top: 18px;
-        left: 18px;
-        z-index: 6000;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-family: inherit;
-    }
+            position: fixed;
+            top: 8px;
+            left: 8px;               /* extreme left */
+            z-index: 9000;
+            display: inline-flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-family: inherit;
+            pointer-events: auto;
+        }
 
         .nav-toggle {
-        width: 56px;
-        height: 56px;
-        border-radius: 12px;
-        border: none;
-        background: linear-gradient(180deg,#006400,#004d00);
-        color: #fff;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-        transition: transform 180ms ease, box-shadow 180ms ease;
-        flex-shrink: 0;
-    }
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(180deg,#006400,#004d00);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            transition: transform 160ms ease, box-shadow 160ms ease;
+            flex-shrink: 0;
+        }
         .nav-toggle:active { transform: scale(0.96); }
         .nav-toggle img { width: 34px; height: 34px; border-radius: 50%; display:block; }
 
         .nav-bar {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        margin-left: 8px;
-        background: rgba(255,255,255,0.98);
-        border-radius: 12px;
-        padding: 10px 14px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-        transform-origin: left center;
-        transform: scaleX(0);
-        opacity: 0;
-        pointer-events: none;
-        transition: transform 260ms cubic-bezier(.2,.9,.3,1), opacity 220ms ease;
-        white-space: nowrap;
-    }
+            position: absolute;
+            left: 0;
+            top: calc(100% + 8px);                       /* open downward under logo */
+            display: flex;
+            flex-direction: column;                      /* vertical layout when opened */
+            align-items: flex-start;
+            gap: 8px;
+            min-width: 220px;
+            max-width: 360px;
+            background: rgba(255,255,255,0.98);
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.14);
+            transform-origin: top left;                  /* grow downward from logo */
+            transform: scaleY(0);                        /* collapsed state (vertical) */
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 240ms cubic-bezier(.2,.9,.3,1), opacity 180ms ease;
+            overflow: hidden;
+        }
 
-    .nav-toggle-container.open .nav-bar {
-        transform: scaleX(1);
-        opacity: 1;
-        pointer-events: auto;
-    }
+        .nav-toggle-container.open .nav-bar {
+            transform: scaleY(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
 
         .nav-links { list-style: none; display: flex; gap: 18px; margin: 0; padding: 0; align-items:center; }
         .nav-links a { color: #1a1a1a; text-decoration: none; font-weight: 600; padding: 8px 6px; display:inline-block; }
@@ -709,15 +715,136 @@
             display: block;
         }
 
-        /* Responsive */
+        /* Responsive - Mobile: Vertical Stack */
         @media (max-width: 768px) {
-            .timeline-wrapper {
-                padding: 0 5vw;
+            /* Switch to vertical scrolling on mobile */
+            body {
+                overflow-y: auto;
+                overflow-x: hidden;
+                height: auto;
             }
 
+            .timeline-wrapper {
+                height: auto;
+                min-height: 100vh;
+                flex-direction: column;
+                padding: 80px 5vw 100px;
+                overflow: visible;
+            }
+
+            .timeline-line {
+                /* Vertical timeline line on mobile */
+                top: 0;
+                bottom: 0;
+                left: 50%;
+                right: auto;
+                width: 2px;
+                height: auto;
+                transform: translateX(-50%);
+            }
+
+            .timeline-line::after {
+                /* Vertical pulse animation */
+                width: 2px;
+                height: 100px;
+                animation: timelinePulseMobile 3s ease-in-out infinite;
+            }
+
+            @keyframes timelinePulseMobile {
+                0%, 100% { 
+                    top: -100px;
+                    opacity: 0;
+                }
+                50% { 
+                    opacity: 1;
+                }
+            }
+
+            .timeline-track {
+                flex-direction: column;
+                gap: 60px;
+                width: 100%;
+            }
+
+            /* Hide cloned track on mobile */
+            .timeline-track:nth-child(3) {
+                display: none;
+            }
+
+            /* Decade markers - horizontal on mobile */
+            .decade-marker {
+                width: 100% !important;
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .decade-line {
+                width: 80px;
+                height: 1px;
+            }
+
+            .decade-label {
+                position: static;
+                transform: none;
+            }
+
+            /* Timeline moments - stack vertically */
+            .timeline-moment {
+                width: 100% !important;
+                position: relative;
+                min-height: auto;
+            }
+
+            /* Beads - centered on vertical line */
+            .bead-container {
+                left: 50%;
+                top: 0;
+                transform: translateX(-50%);
+            }
+
+            .connector-line.top {
+                display: none;
+            }
+
+            .connector-line.bottom {
+                height: 40px;
+            }
+
+            /* Cards and images - reset positioning */
             .timeline-card,
             .timeline-image {
-                width: 85vw;
+                position: static !important;
+                width: 100%;
+                max-width: 500px;
+                margin: 40px auto 0;
+            }
+
+            .timeline-moment.top .timeline-card,
+            .timeline-moment.bottom .timeline-card {
+                bottom: auto;
+                top: auto;
+            }
+
+            .timeline-moment.top .timeline-image,
+            .timeline-moment.bottom .timeline-image {
+                top: auto;
+                bottom: auto;
+                margin-top: 20px;
+            }
+
+            /* Intermission section */
+            .intermission-section {
+                width: 100% !important;
+                padding: 40px 20px;
+            }
+
+            .intermission-title {
+                font-size: 28px;
+            }
+
+            .poster-gallery {
+                flex-direction: column;
+                gap: 20px;
             }
 
             .story-body {
@@ -733,15 +860,6 @@
                 right: 20px;
                 padding: 10px 20px;
                 font-size: 11px;
-            }
-
-            .intermission-title {
-                font-size: 28px;
-            }
-
-            .poster-gallery {
-                flex-direction: column;
-                gap: 20px;
             }
         }
 
@@ -1195,18 +1313,27 @@
         let targetScrollLeft = 0;
         let springOffset = 0; // Visual spring effect for cards
         
-        window.addEventListener('wheel', (e) => {
-            // allow native vertical scrolling when the story modal is open
-            // and the pointer is inside the modal's scrollable content
+         window.addEventListener('wheel', (e) => {
             const storyContentEl = document.querySelector('.story-content');
+            const timelineWrapper = document.getElementById('timelineWrapper');
+
+            // 1) If modal is open and pointer is inside modal -> allow native scrolling
             if (modal.classList.contains('active') && storyContentEl && storyContentEl.contains(e.target)) {
-                // let browser handle scroll inside modal
-                return;
+                return; // let browser handle it
             }
-            // otherwise prevent default and drive the horizontal timeline scroll
-            e.preventDefault();
-            const delta = e.deltaY || e.deltaX;
-            targetScrollLeft += delta * 1.5;
+
+            // 2) If we're in mobile/vertical mode, let native vertical scrolling happen.
+            //    Adjust the matchMedia breakpoint to match your vertical-mode breakpoint if different.
+            const isVerticalMode = window.matchMedia('(max-width: 768px)').matches || document.body.classList.contains('vertical-scroll');
+            if (isVerticalMode) return;
+
+            // 3) If the pointer is over the timeline area -> capture and do horizontal scroll.
+            if (timelineWrapper && timelineWrapper.contains(e.target)) {
+                e.preventDefault(); // needed to stop vertical page move
+                const delta = e.deltaY || e.deltaX;
+                targetScrollLeft += delta * 1.5;
+            }
+            // else: allow native behavior (scroll page) — do nothing
         }, { passive: false });
 
         // Seamless infinite loop with elastic bounce at start
@@ -1487,7 +1614,7 @@
                 container.setAttribute('aria-expanded', 'true');
                 btn.setAttribute('aria-expanded', 'true');
                 bar.setAttribute('aria-hidden', 'false');
-                // close when clicking outside
+                // click outside to close
                 setTimeout(() => document.addEventListener('click', outsideHandler));
             };
 
@@ -1504,17 +1631,24 @@
             };
 
             btn.addEventListener('click', (ev) => {
-                ev.stopPropagation();
+               ev.stopPropagation();
                 if (container.classList.contains('open')) closeNav();
                 else openNav();
             });
+
+            // auto-close the nav on user scroll / wheel / touchmove to reduce clutter
+            const autoCloseOnInteraction = () => {
+                if (container.classList.contains('open')) closeNav();
+            };
+            window.addEventListener('scroll', autoCloseOnInteraction, { passive: true });
+            window.addEventListener('wheel', autoCloseOnInteraction, { passive: true });
+            window.addEventListener('touchmove', autoCloseOnInteraction, { passive: true });
 
             // keyboard support
             document.addEventListener('keydown', (ev) => {
                 if (ev.key === 'Escape') closeNav();
             });
         })();
-
         // helper: convert many YouTube URL forms to an /embed/ URL
         function getYouTubeEmbed(url) {
             if (!url) return null;
