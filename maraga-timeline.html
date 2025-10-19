@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>David Maraga: A Journey Through Time</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            height: 100vh;
+            background: #fafafa;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Join the Movement Button */
+        .join-movement {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(0, 100, 0, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            z-index: 2000;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 12px rgba(0, 100, 0, 0.3);
+        }
+
+        .join-movement:hover {
+            background: #006400;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 100, 0, 0.5);
+        }
+
+        /* Timeline Container */
+        .timeline-wrapper {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10vw;
+            min-width: max-content;
+        }
+
+        /* Main Timeline Line with Animated Pulse */
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                #DC143C 0%, 
+                #1a1a1a 25%, 
+                #006400 50%, 
+                #FFD700 75%, 
+                #DC143C 100%
+            );
+            z-index: 1;
+        }
+
+        .timeline-line::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 215, 0, 0.4), 
+                transparent
+            );
+            animation: timelinePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes timelinePulse {
+            0%, 100% { 
+                left: -100px;
+                opacity: 0;
+            }
+            50% { 
+                opacity: 1;
+            }
+        }
+
+        /* Timeline Track - Duplicate content for infinite loop */
+        .timeline-track {
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Hide the loop marker - we don't need it anymore */
+        .loop-back-marker {
+            display: none;
+        }
+
+        /* Decade Markers with Centered Labels */
+        .decade-marker {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .decade-line {
+            width: 1px;
+            height: 80px;
+            background: #ddd;
+            position: relative;
+        }
+
+        .decade-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a1a1a;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            background: white;
+            padding: 6px 14px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Timeline Moments with Beads */
+        .timeline-moment {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Bead System */
+        .bead-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+        }
+
+        .bead {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Connector Lines from Beads */
+        .connector-line {
+            position: absolute;
+            width: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.6;
+        }
+
+        .connector-line.top {
+            top: -7px;
+            height: 80px;
+            transform-origin: top;
+        }
+
+        .connector-line.bottom {
+            bottom: -7px;
+            height: 80px;
+            transform-origin: bottom;
+        }
+
+        /* Color cycling for beads */
+        .timeline-moment:nth-child(3n+1) .bead { background: #DC143C; }
+        .timeline-moment:nth-child(3n+1) .connector-line { background: #DC143C; }
+
+        .timeline-moment:nth-child(3n+2) .bead { background: #1a1a1a; }
+        .timeline-moment:nth-child(3n+2) .connector-line { background: #1a1a1a; }
+
+        .timeline-moment:nth-child(3n) .bead { background: #006400; }
+        .timeline-moment:nth-child(3n) .connector-line { background: #006400; }
+
+        /* Special bead for 2017 Annulment */
+        .annulment-moment .bead {
+            width: 18px;
+            height: 18px;
+            background: #FFD700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .annulment-moment .connector-line {
+            background: #FFD700;
+            width: 3px;
+        }
+
+        /* Cards with Rounded Corners - Green Shadow Behind */
+        .timeline-card {
+            width: 380px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 35px 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: transparent;
+            box-shadow: 0 8px 40px rgba(0, 100, 0, 0);
+            border-radius: 8px;
+            z-index: -1;
+            transition: box-shadow 0.4s ease;
+        }
+
+        .timeline-card:hover::after {
+            box-shadow: 0 12px 50px rgba(0, 100, 0, 0.35);
+        }
+
+        .timeline-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Position cards */
+        .timeline-moment.top .timeline-card {
+            position: absolute;
+            bottom: 100px;
+        }
+
+        .timeline-moment.bottom .timeline-card {
+            position: absolute;
+            top: 100px;
+        }
+
+        /* Images - Borderless, Rounded Corners */
+        .timeline-image {
+            width: 380px;
+            height: 280px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 12px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .timeline-image.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-image:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Position images */
+        .timeline-moment.top .timeline-image {
+            position: absolute;
+            top: 100px;
+        }
+
+        .timeline-moment.bottom .timeline-image {
+            position: absolute;
+            bottom: 100px;
+        }
+
+        /* Card Content */
+        .card-year {
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: #999;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.2;
+            color: #1a1a1a;
+            margin-bottom: 18px;
+        }
+
+        .card-description {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #666;
+        }
+
+        .explore-hint {
+            font-style: italic;
+            font-size: 13px;
+            color: #ccc;
+            margin-top: 20px;
+            opacity: 0.6;
+        }
+
+        /* 2017 Annulment Card Special Styling */
+        .annulment-card .card-title {
+            font-size: 28px;
+            color: #DC143C;
+        }
+
+        /* Intermission Section - Playful Break */
+        .intermission-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            padding: 60px 40px;
+            position: relative;
+        }
+
+        .intermission-title {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: #DC143C;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .poster-gallery {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .poster-card {
+            width: 180px;
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transform: rotate(var(--rotation, 0deg));
+            transition: all 0.4s ease;
+            animation: posterFloat 3s ease-in-out infinite;
+            animation-delay: calc(var(--index, 0) * 0.5s);
+        }
+
+        .poster-card:nth-child(1) { 
+            --index: 0;
+            --rotation: -8deg;
+        }
+        .poster-card:nth-child(2) { 
+            --index: 1;
+            --rotation: 5deg;
+        }
+        .poster-card:nth-child(3) { 
+            --index: 2;
+            --rotation: -3deg;
+        }
+
+        @keyframes posterFloat {
+            0%, 100% { transform: rotate(var(--rotation)) translateY(0); }
+            50% { transform: rotate(var(--rotation)) translateY(-12px); }
+        }
+
+        .poster-card:hover {
+            transform: rotate(0deg) scale(1.1);
+            z-index: 10;
+        }
+
+        .poster-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #DC143C 0%, #006400 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .poster-caption {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: 1px;
+        }
+
+        /* Hide loop arrow */
+        .loop-arrow {
+            display: none;
+        }
+
+        /* Story Modal */
+        .story-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .story-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .story-content {
+            background: white;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 100, 0, 0.4);
+            transform: scale(0.9) translateY(40px);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .story-modal.active .story-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .story-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .story-content::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+
+        .story-content::-webkit-scrollbar-thumb {
+            background: #DC143C;
+            border-radius: 4px;
+        }
+
+        .story-hero {
+            width: 100%;
+            height: 400px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 14px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .story-body {
+            padding: 50px 60px;
+        }
+
+        .story-year {
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: #999;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .story-title {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 42px;
+            font-weight: 700;
+            line-height: 1.2;
+            color: #1a1a1a;
+            margin-bottom: 30px;
+        }
+
+        .story-narrative {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #2a2a2a;
+            margin-bottom: 40px;
+        }
+
+        .story-narrative p {
+            margin-bottom: 20px;
+        }
+
+        .story-section {
+            margin-bottom: 40px;
+        }
+
+        .story-section-title {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: #DC143C;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #006400;
+            padding-bottom: 10px;
+        }
+
+        .story-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery-item {
+            height: 200px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 11px;
+        }
+
+        .story-downloads {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .download-item {
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #DC143C;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .download-btn {
+            background: #006400;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: #004d00;
+        }
+
+        .story-video {
+            width: 100%;
+            height: 400px;
+            background: #000;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #1a1a1a;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: white;
+            transform: rotate(90deg);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .timeline-wrapper {
+                padding: 0 5vw;
+            }
+
+            .timeline-card,
+            .timeline-image {
+                width: 85vw;
+            }
+
+            .story-body {
+                padding: 40px 30px;
+            }
+
+            .story-title {
+                font-size: 32px;
+            }
+
+            .join-movement {
+                top: 20px;
+                right: 20px;
+                padding: 10px 20px;
+                font-size: 11px;
+            }
+
+            .intermission-title {
+                font-size: 28px;
+            }
+
+            .poster-gallery {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Join the Movement Button -->
+    <button class="join-movement" onclick="alert('Join the Movement!')">Join the Movement</button>
+
+    <div class="timeline-wrapper" id="timelineWrapper">
+        <div class="timeline-line"></div>
+        
+        <div class="timeline-track">
+            
+            <!-- Decade Marker: 1950s -->
+            <div class="decade-marker" style="width: 150px;">
+                <div class="decade-line"><div class="decade-label">1950s</div></div>
+            </div>
+
+            <!-- 1. Coming of Age -->
+            <div class="timeline-moment top" style="width: 400px;" data-moment="coming-of-age">
+                <div class="bead-container">
+                    <div class="connector-line top"></div>
+                    <div class="bead"></div>
+                    <div class="connector-line bottom"></div>
+                </div>
+                <div class="timeline-card">
+                    <div class="card-year">1950s-1970s</div>
+                    <h2 class="card-title">Coming of Age</h2>
+                    <p class="card-description">
+                        Childhood, education, and formative years shaped by faith, integrity, and determination.
+                    </p>
+                    <div class="explore-hint">explore...</div>
+                </div>
+                <div class="timeline-image" data-moment="coming-of-age">
+                    [Childhood & Education Photos]
+                </div>
+            </div>
+
+            <!-- Decade Marker: 1980s -->
+            <div class="decade-marker" style="width: 150px;">
+                <div class="decade-line"><div class="decade-label">1980s</div></div>
+            </div>
+
+            <!-- 2. Early Career as Advocate -->
+            <div class="timeline-moment bottom" style="width: 400px;" data-moment="early-career">
+                <div class="bead-container">
+                    <div class="connector-line top"></div>
+                    <div class="bead"></div>
+                    <div class="connector-line bottom"></div>
+                </div>
+                <div class="timeline-image" data-moment="early-career">
+                    [Young Advocate Photos]
+                </div>
+                <div class="timeline-card">
+                    <div class="card-year">1980s</div>
+                    <h2 class="card-title">Early Career as Advocate</h2>
+                    <p class="card-description">
+                        Beginning a legal career built on principles and dedication to justice.
+                    </p>
+                    <div class="explore-hint">explore...</div>
+                </div>
+            </div>
+
+            <!-- Decade Marker: 1990s -->
+            <div class="decade-marker" style="width: 150px;">
+                <div class="decade-line"><div class="decade-label">1990s</div></div>
+            </div>
+
+            <!-- 3. Appointment as Judge -->
+            <div class="timeline-moment top" style="width: 400px;" data-moment="appointment">
+                <div class="bead-container">
+                    <div class="connector-line top"></div>
+                    <div class="bead"></div>
+                    <div class="connector-line bottom"></div>
+                </div>
+                <div class="timeline-card">
+                    <div class="card-year">1990s</div>
+                    <h2 class="card-title">Appointment as Judge</h2>
+                    <p class="card-description">
+                        Ascending to the bench, beginning a distinguished judicial career.
+                    </p>
+                    <div class="explore-hint">explore...</div>
+                </div>
+                <div class="timeline-image" data-moment="appointment">
+                    [Judicial Appointment Ceremony]
+                </div>
+            </div>
+
+            <!-- Decade Marker: 2000s -->
+            <div class="decade-marker" style="width: 150px;">
+                <div class="decade-line"><div class="decade-label">2000s</div></div>
+            </div>
+
+            <!-- 4. Moving Up Judicial Ranks -->
+            <div class="timeline-moment bottom" style="width: 400px;" data-moment="judicial-ranks">
+                <div class="bead-container">
+                    <div class="connector-line top"></div>
+                    <div class="bead"></div>
+                    <div class="connector-line bottom"></div>
+                </div>
+                <div class="timeline-image" data-moment="judicial-ranks">
+                    [Court of Appeal Photos]
+                </div>
+                <div class="timeline-card">
+                    <div class="card-year">2000s-2010s</div>
+                    <h2 class="card-title">Moving Up Judicial Ranks</h2>
+                    <p class="card-description">
+                        Rising through the judiciary with distinction, building toward the highest office.
+                    </p>
+                    <div class="explore-hint">explore...</div>
+                </div>
+            </div>
+
+            <!-- Decade Marker: 2010s -->
+            <div class="decade-marker" style="width: 150px;">
+                <div class="decade-line"><div class="decade-label">2010s</div></div>
+            </div>
+
+            <!-- 5. President of Supreme Court -->
+            <div class="timeline-moment top" style="width: 400px;" data-moment="president-scok">
+                <div class="bead-container">
+                    <div class="connector-line top"></div>
+                    <div class="bead"></div>
+                    <div class="connector-line bottom"></div>
+                </div>
+                <div class="timeline-card">
+                    <div class="card-year">2016</div>
+                    <h2 class="card-title">President of Supreme Court</h2>
+                    <p class="card-description">
+                        Appointed Chief Justice. His vision for the judiciary: independence, integrity, and service.
+                    </p>
+                    <div class="explore-hint">explore...</div>
+                </div>
+                <div class="timeline-image" data-moment="president-scok">
+                    [Chief Justice Swearing-In]
+                </div>
+            </div>
+
+            <!-- 6. THE ANNULMENT -->
+            <div class="timeline-moment bottom annulment-moment" style="width: 400px;" data-moment="annulment">
+                <div class="bead-container">
+                    <div class="connector-line top"></div>
+                    <div class="bead"></div>
+                    <div class="connector-line bottom"></div>
+                </div>
+                <div class="timeline-image" data-moment="annulment">
+                    [Supreme Court Ruling Day]
+                </div>
+                <div class="timeline-card annulment-card">
+                    <div class="card-year">September 1, 2017</div>
+                    <h2 class="card-title">The Annulment</h2>
+                    <p class="card-description">
+                        Historic ruling annulling presidential election. SCOK judgment, lawyer arguments, drama, elation. The day decades happened.
+                    </p>
+                    <div class="explore-hint">explore...</div>
+                </div>
+            </div>
+
+            <!-- Decade Marker: 2018 -->
+            <div class="decade-marker" style="width: 150px;">
+                <div class="decade-line"><div class="decade-label">2018</div></div>
+            </div>
+
+            <!-- 7. We Shall Revisit -->
+            <div class="timeline-moment top" style="width: 400px;" data-moment="revisit">
+                <div class="bead-container">
+                    <div class="connector-line top"></div>
+                    <div class="bead"></div>
+                    <div class="connector-line bottom"></div>
+                </div>
+                <div class="timeline-card">
+                    <div class="card-year">2018-2020</div>
+                    <h2 class="card-title">"We Shall Revisit..."</h2>
+                    <p class="card-description">
+                        Judiciary persecuted. Maraga standing firm, defending judicial independence against power.
+                    </p>
+                    <div class="explore-hint">explore...</div>
+                </div>
+                <div class="timeline-image" data-moment="revisit">
+                    [Maraga Defending Judiciary]
+                </div>
+            </div>
+
+            <!-- Decade Marker: 2021 -->
+            <div class="decade-marker" style="width: 150px;">
+                <div class="decade-line"><div class="decade-label">2021</div></div>
+            </div>
+
+            <!-- 8. Judicial Legacy -->
+            <div class="timeline-moment bottom" style="width: 400px;" data-moment="legacy">
+                <div class="bead-container">
+                    <div class="connector-line top"></div>
+                    <div class="bead"></div>
+                    <div class="connector-line bottom"></div>
+                </div>
+                <div class="timeline-image" data-moment="legacy">
+                    [Retirement & Reflections]
+                </div>
+                <div class="timeline-card">
+                    <div class="card-year">2021</div>
+                    <h2 class="card-title">Judicial Legacy</h2>
+                    <p class="card-description">
+                        Did he achieve his vision? What judges, lawyers, and Kenyans say about his impact.
+                    </p>
+                    <div class="explore-hint">explore...</div>
+                </div>
+            </div>
+
+            <!-- Decade Marker: 2024 -->
+            <div class="decade-marker" style="width: 150px;">
+                <div class="decade-line"><div class="decade-label">2024</div></div>
+            </div>
+
+            <!-- 9. Presidential Ambitions -->
+            <div class="timeline-moment top" style="width: 400px;" data-moment="presidential">
+                <div class="bead-container">
+                    <div class="connector-line top"></div>
+                    <div class="bead"></div>
+                    <div class="connector-line bottom"></div>
+                </div>
+                <div class="timeline-card">
+                    <div class="card-year">2025-2027</div>
+                    <h2 class="card-title">Presidential Ambitions</h2>
+                    <p class="card-description">
+                        Maraga the man for the job. From guardian of law to candidate for the presidency.
+                    </p>
+                    <div class="explore-hint">explore...</div>
+                </div>
+                <div class="timeline-image" data-moment="presidential">
+                    [Campaign Launch Photos]
+                </div>
+            </div>
+
+            <!-- 10. Rebuilding Kenya -->
+            <div class="timeline-moment bottom" style="width: 400px;" data-moment="rebuilding">
+                <div class="bead-container">
+                    <div class="connector-line top"></div>
+                    <div class="bead"></div>
+                    <div class="connector-line bottom"></div>
+                </div>
+                <div class="timeline-image" data-moment="rebuilding">
+                    [Campaign Trail Photos]
+                </div>
+                <div class="timeline-card">
+                    <div class="card-year">2027</div>
+                    <h2 class="card-title">Rebuilding Kenya</h2>
+                    <p class="card-description">
+                        His manifesto, key pillars, campaign calendar. Where the campaign trail leads—toward hope.
+                    </p>
+                    <div class="explore-hint">explore...</div>
+                </div>
+            </div>
+
+            <!-- Decade Marker: 2027 -->
+            <div class="decade-marker" style="width: 150px;">
+                <div class="decade-line"><div class="decade-label">2027</div></div>
+            </div>
+
+            <!-- INTERMISSION / POSTER GALLERY - Playful Break Before Loop -->
+            <div class="intermission-section" style="width: 600px;">
+                <div class="intermission-title">The Journey Continues...</div>
+                <div class="poster-gallery">
+                    <div class="poster-card">
+                        <div class="poster-image">[Campaign Poster 1]</div>
+                        <div class="poster-caption">Restore</div>
+                    </div>
+                    <div class="poster-card">
+                        <div class="poster-image">[Campaign Poster 2]</div>
+                        <div class="poster-caption">Reset</div>
+                    </div>
+                    <div class="poster-card">
+                        <div class="poster-image">[Campaign Poster 3]</div>
+                        <div class="poster-caption">Rebuild</div>
+                    </div>
+                </div>
+                <div class="loop-arrow">↻</div>
+            </div>
+
+            <!-- Loop back marker - Hidden but keeps spacing -->
+            <div class="decade-marker loop-back-marker" style="width: 100px;">
+                <div class="decade-line"><div class="decade-label">→</div></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Duplicate timeline track for seamless infinite loop (hidden, will be cloned by JS) -->
+    <template id="timeline-clone-template">
+        <!-- Content will be cloned here by JavaScript -->
+    </template>
+
+    <!-- Story Modal -->
+    <div class="story-modal" id="storyModal">
+        <button class="close-modal" onclick="closeModal()">×</button>
+        <div class="story-content">
+            <div class="story-hero" id="storyHero">[Hero Image]</div>
+            <div class="story-body" id="storyBody"></div>
+        </div>
+    </div>
+
+    <script>
+        const wrapper = document.getElementById('timelineWrapper');
+        const track = document.querySelector('.timeline-track');
+        const cards = document.querySelectorAll('.timeline-card');
+        const images = document.querySelectorAll('.timeline-image');
+        const modal = document.getElementById('storyModal');
+        const storyBody = document.getElementById('storyBody');
+
+        // Clone the timeline content to create seamless infinite loop
+        const trackClone = track.cloneNode(true);
+        track.parentElement.appendChild(trackClone);
+
+        // Get all cards and images after cloning
+        const allCards = document.querySelectorAll('.timeline-card');
+        const allImages = document.querySelectorAll('.timeline-image');
+
+        // Intersection Observer for visibility
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.3 });
+
+        allCards.forEach(card => observer.observe(card));
+        allImages.forEach(image => observer.observe(image));
+
+        // Vertical to Horizontal Scroll with Elastic Bounce
+        let targetScrollLeft = 0;
+        let springOffset = 0; // Visual spring effect for cards
+        
+        window.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY || e.deltaX;
+            targetScrollLeft += delta * 1.5;
+        }, { passive: false });
+
+        // Seamless infinite loop with elastic bounce at start
+        const originalTrackWidth = track.scrollWidth;
+        
+        function checkInfiniteLoop() {
+            let scrollLeft = window.scrollX;
+            
+            // Forward infinite loop
+            if (targetScrollLeft >= originalTrackWidth) {
+                const offset = targetScrollLeft - originalTrackWidth;
+                targetScrollLeft = offset;
+                window.scrollTo({ left: offset, behavior: 'auto' });
+            }
+            
+            // Elastic bounce at start (0 position)
+            if (targetScrollLeft < 0) {
+                // Spring force pulls back to 0
+                const springForce = -targetScrollLeft * 0.15;
+                targetScrollLeft += springForce;
+                
+                // Visual spring offset for cards
+                springOffset = targetScrollLeft * 0.5; // Half the negative value for visual effect
+                
+                // Apply spring effect to all cards
+                allCards.forEach(card => {
+                    card.style.transform = `translateY(0) translateX(${springOffset}px)`;
+                });
+                allImages.forEach(img => {
+                    img.style.transform = `translateY(0) translateX(${springOffset}px)`;
+                });
+                
+                // If very close to 0, snap to 0
+                if (Math.abs(targetScrollLeft) < 0.5) {
+                    targetScrollLeft = 0;
+                    springOffset = 0;
+                    // Reset card transforms
+                    allCards.forEach(card => {
+                        card.style.transform = '';
+                    });
+                    allImages.forEach(img => {
+                        img.style.transform = '';
+                    });
+                }
+            } else {
+                // No spring effect when not at boundary
+                springOffset = 0;
+            }
+            
+            // Apply the scroll position
+            window.scrollTo({ left: targetScrollLeft, behavior: 'auto' });
+            
+            requestAnimationFrame(checkInfiniteLoop);
+        }
+        
+        checkInfiniteLoop();
+
+        // Click handlers for cards and images
+        allCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const moment = card.closest('[data-moment]')?.dataset.moment;
+                if (moment) openStory(moment);
+            });
+        });
+
+        allImages.forEach(image => {
+            image.addEventListener('click', () => {
+                const moment = image.dataset.moment;
+                if (moment) openStory(moment);
+            });
+        });
+
+        // Story data for each moment
+        const storyData = {
+            'annulment': {
+                year: 'September 1, 2017',
+                title: 'The Annulment',
+                narrative: `
+                    <p>On September 1, 2017, Chief Justice David Maraga delivered a ruling that would reverberate across Kenya and the African continent. The Supreme Court of Kenya annulled the presidential election results, citing irregularities and illegalities in the electoral process.</p>
+                    <p>Lawyer arguments, SCOK judgment highlights, images of the dramatic courtroom moments, and the jubilation of citizens who witnessed democracy defended.</p>
+                    <p>This was the day where decades happened. The Maraga Judgment became a defining moment in Kenya's democratic journey.</p>
+                `,
+                gallery: true,
+                downloads: [
+                    { name: 'Supreme Court Ruling - Full Judgment', file: 'ruling.pdf' },
+                    { name: 'Press Statement - September 2017', file: 'statement.pdf' }
+                ],
+                video: true
+            },
+            'coming-of-age': {
+                year: '1950s-1970s',
+                title: 'Coming of Age',
+                narrative: `
+                    <p>David Maraga's early years were marked by humble beginnings in rural Kenya. His childhood and education laid the foundation for a life of integrity and service.</p>
+                    <p>Faith, determination, and strong family values shaped the man who would one day defend Kenya's democracy.</p>
+                `,
+                gallery: true,
+                downloads: [],
+                video: false
+            },
+            'early-career': {
+                year: '1980s',
+                title: 'Early Career as Advocate',
+                narrative: `
+                    <p>Beginning his legal career in the 1980s, Maraga quickly established himself as a principled advocate committed to justice and the rule of law.</p>
+                `,
+                gallery: true,
+                downloads: [],
+                video: false
+            },
+            'appointment': {
+                year: '1990s',
+                title: 'Appointment as Judge',
+                narrative: `
+                    <p>Maraga's appointment to the bench marked the beginning of a distinguished judicial career characterized by fairness, integrity, and dedication to the law.</p>
+                `,
+                gallery: true,
+                downloads: [],
+                video: false
+            },
+            'judicial-ranks': {
+                year: '2000s-2010s',
+                title: 'Moving Up Judicial Ranks',
+                narrative: `
+                    <p>Rising through the Court of Appeal and higher courts, Maraga built a reputation as one of Kenya's most respected jurists.</p>
+                `,
+                gallery: true,
+                downloads: [],
+                video: false
+            },
+            'president-scok': {
+                year: '2016',
+                title: 'President of Supreme Court',
+                narrative: `
+                    <p>Appointed Chief Justice in 2016, Maraga brought a vision of judicial independence, integrity, and service to the people of Kenya.</p>
+                `,
+                gallery: true,
+                downloads: [],
+                video: true
+            },
+            'revisit': {
+                year: '2018-2020',
+                title: '"We Shall Revisit..."',
+                narrative: `
+                    <p>Following the 2017 annulment, the judiciary faced persecution and pressure. Maraga stood firm, defending judicial independence against political interference.</p>
+                    <p>His famous words "We shall revisit this matter" became a rallying cry for the rule of law.</p>
+                `,
+                gallery: true,
+                downloads: [],
+                video: true
+            },
+            'legacy': {
+                year: '2021',
+                title: 'Judicial Legacy',
+                narrative: `
+                    <p>Upon retirement, Maraga left behind a powerful legacy. Judges, lawyers, and citizens reflect on his impact on Kenya's judiciary and democracy.</p>
+                    <p>Did he achieve his vision? The answer lies in the strengthened institutions and renewed faith in the rule of law.</p>
+                `,
+                gallery: true,
+                downloads: [],
+                video: false
+            },
+            'presidential': {
+                year: '2025-2027',
+                title: 'Presidential Ambitions',
+                narrative: `
+                    <p>From guardian of the law to candidate for the highest office in the land. David Maraga steps forward with a vision for Kenya built on integrity, justice, and hope.</p>
+                    <p>The man who stood up to power now seeks to lead the nation toward a better future.</p>
+                `,
+                gallery: true,
+                downloads: [],
+                video: true
+            },
+            'rebuilding': {
+                year: '2027',
+                title: 'Rebuilding Kenya',
+                narrative: `
+                    <p>Maraga's manifesto focuses on key pillars: strengthening institutions, fighting corruption, economic transformation, and restoring hope.</p>
+                    <p>The campaign trail leads across Kenya, meeting citizens and sharing a vision of a country that works for everyone.</p>
+                `,
+                gallery: true,
+                downloads: [
+                    { name: 'Campaign Manifesto 2027', file: 'manifesto.pdf' },
+                    { name: 'Policy Positions', file: 'policy.pdf' }
+                ],
+                video: true
+            }
+        };
+
+        // Open story modal
+        function openStory(moment) {
+            const data = storyData[moment] || storyData['annulment'];
+            
+            let content = `
+                <div class="story-year">${data.year}</div>
+                <h1 class="story-title">${data.title}</h1>
+                <div class="story-narrative">${data.narrative}</div>
+            `;
+
+            if (data.gallery) {
+                content += `
+                    <div class="story-section">
+                        <div class="story-section-title">Gallery</div>
+                        <div class="story-gallery">
+                            <div class="gallery-item">[Image 1]</div>
+                            <div class="gallery-item">[Image 2]</div>
+                            <div class="gallery-item">[Image 3]</div>
+                            <div class="gallery-item">[Image 4]</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (data.downloads && data.downloads.length > 0) {
+                content += `<div class="story-section">
+                    <div class="story-section-title">Documents</div>
+                    <div class="story-downloads">`;
+                data.downloads.forEach(doc => {
+                    content += `
+                        <div class="download-item">
+                            <span>${doc.name}</span>
+                            <button class="download-btn" onclick="alert('Download: ${doc.file}')">Download</button>
+                        </div>
+                    `;
+                });
+                content += `</div></div>`;
+            }
+
+            if (data.video) {
+                content += `
+                    <div class="story-section">
+                        <div class="story-section-title">Video</div>
+                        <div class="story-video">[YouTube Embed: ${data.title}]</div>
+                    </div>
+                `;
+            }
+
+            content += `
+                <div class="story-section" style="text-align: center; padding: 40px 0;">
+                    <button class="join-movement" style="position: static;" onclick="alert('Join the Movement!')">Join the Movement</button>
+                </div>
+            `;
+
+            storyBody.innerHTML = content;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close story modal
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+            if (e.key === 'ArrowLeft') {
+                window.scrollBy({ left: -window.innerWidth * 0.5, behavior: 'smooth' });
+            } else if (e.key === 'ArrowRight') {
+                window.scrollBy({ left: window.innerWidth * 0.5, behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
