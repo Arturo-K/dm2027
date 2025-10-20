@@ -458,7 +458,8 @@
             justify-content: center;
             gap: 40px;
             padding: 60px 40px;
-            position: relative;
+             z-index: 40; /* above the timeline-line (z-index:1) */
+            background: transparent; /* keep existing look */
         }
 
         .intermission-title {
@@ -487,11 +488,14 @@
             transition: all 0.4s ease;
             animation: posterFloat 3s ease-in-out infinite;
             animation-delay: calc(var(--index, 0) * 0.5s);
+            position: relative;
+            z-index: 45;
         }
 
         .poster-card:nth-child(1) { 
             --index: 0;
             --rotation: -8deg;
+
         }
         .poster-card:nth-child(2) { 
             --index: 1;
@@ -523,6 +527,9 @@
             color: white;
             font-size: 12px;
             margin-bottom: 12px;
+            position: relative;
+            z-index: 46;
+            background: transparent;
         }
 
         .poster-caption {
@@ -531,6 +538,9 @@
             font-weight: 700;
             color: #1a1a1a;
             letter-spacing: 1px;
+            position: relative;
+            z-index: 46;
+            background: transparent ;
         }
 
         /* Hide loop arrow */
@@ -818,12 +828,22 @@
                 width: 2px !important;
                 height: 100% !important;
                 transform: translateX(-50%) translateY(0) !important;
+                background: linear-gradient(180deg,
+                    #DC143C 0%,
+                    #006400 50%,
+                    #FFD700 100%
+                ) !important;
             }
 
             .timeline-line::after {
                 /* Vertical pulse animation */
+                content: '';
+                position: absolute;
+                left: 0;
+                top: -100px;
                 width: 2px;
                 height: 100px;
+                background: linear-gradient(180deg, rgba(255,215,0,0.4), transparent);
                 animation: timelinePulseMobile 3s ease-in-out infinite;
             }
 
@@ -872,7 +892,17 @@
                 left: auto !important;
                 right: auto !important;
                 transform: none !important;
-                z-index: 35;
+                z-index: 40 ;
+            }
+
+            .timeline-card,
+            .timeline-image {
+                position: static !important;
+                background: #fff !important;     /* opaque so line doesn't show through */
+                transform: none !important;      /* cancel any hover transforms */
+                box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+                margin: 18px auto !important;    /* explicit spacing so they appear as two elements */
+                pointer-events: auto !important;
             }
 
             /* Decade markers - horizontal on mobile */
