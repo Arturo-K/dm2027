@@ -135,7 +135,7 @@
             top: 0;
             z-index: 1000;
             --footer-height: 72px;
-            height: calc(100vh - var(--footer-height));
+            height: calc(114vh - var(--footer-height));
             min-height: 36vh;
             display: flex;
             align-items: center;
@@ -284,18 +284,19 @@
             width: 2px;
             left: 50%;
             transform: translateX(-50%);
-            opacity: 0.6;
+            opacity: 0.3;
+            z-index: 2;
         }
 
         .connector-line.top {
-            top: -7px;
-            height: 80px;
+            top: -4px;
+            height: 40px;
             transform-origin: top;
         }
 
         .connector-line.bottom {
-            bottom: -7px;
-            height: 80px;
+            bottom: -4px;
+            height: 40px;
             transform-origin: bottom;
         }
 
@@ -956,6 +957,7 @@
                 width: 100%;
                 max-width: 500px;
                 margin: 40px auto 0;
+                z-index :45;
             }
 
             /* add explicit vertical spacing so they don't look glued together */
