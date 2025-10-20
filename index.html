@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>David Maraga: A Journey Through Time</title>
     <style>
         * {
@@ -13,8 +13,8 @@
 
         body {
             font-family: 'Georgia', serif;
-            overflow: hidden;
-            height: 100vh;
+            overflow: auto;
+            min-height: 100vh;
             background: #fafafa;
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -130,15 +130,30 @@
 
         /* Timeline Container */
         .timeline-wrapper {
-            position: relative;
-            /* reserve space for the fixed low-profile footer */
-            height: calc(100vh - 64px);
+            /* sticky/fixed-ish timeline: stays in view while the page scrolls */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            --footer-height: 72px;
+            height: calc(100vh - var(--footer-height));
+            min-height: 36vh;
             display: flex;
             align-items: center;
-            padding: 0 10vw;
+            padding: 48px 10vw 80px;
             min-width: max-content;
-            padding-bottom: 80px;
+            /* horizontal scrolling inside the wrapper; prevent vertical scroll jitter */
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
         }
+
+        .timeline-track {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 40px;
+            align-items: center;
+        }        
+            
 
         /* Main Timeline Line with Animated Pulse */
         .timeline-line {
@@ -715,6 +730,53 @@
             display: block;
         }
 
+        /* Desktop (wide) nav: expand horizontally to the right of the logo */
+        @media (min-width: 769px) {
+            .nav-toggle-container {
+                /* keep at top-left but allow horizontal layout */
+                top: 12px;
+                left: 12px;
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .nav-bar {
+                /* position the bar to the right of the logo and center vertically */
+                position: absolute;
+                left: calc(100% + 10px);        /* placed after the logo button */
+                top: 50%;
+                transform: translateY(-50%) scaleX(0);
+                transform-origin: left center;  /* grow from the left edge (logo) */
+                flex-direction: row;
+                align-items: center;
+                gap: 18px;
+                min-width: 180px;
+                max-width: 720px;
+                padding: 8px 12px;
+                border-radius: 12px;
+                opacity: 0;
+                pointer-events: none;
+                transition: transform 260ms cubic-bezier(.2,.9,.3,1), opacity 200ms ease;
+                white-space: nowrap;
+                overflow: hidden;
+                background: rgba(255,255,255,0.98);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            }
+
+            /* When open we scale X (horizontal) */
+            .nav-toggle-container.open .nav-bar {
+                transform: translateY(-50%) scaleX(1);
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            /* Layout tweaks for horizontal bar */
+            .nav-links { gap: 24px; }
+            .nav-links a { padding: 8px 10px; }
+            .nav-actions { gap: 12px; }
+            .nav-actions .social a { width: 36px; height:36px; }
+        }
+
         /* Responsive - Mobile: Vertical Stack */
         @media (max-width: 768px) {
             /* Switch to vertical scrolling on mobile */
@@ -728,7 +790,7 @@
                 height: auto;
                 min-height: 100vh;
                 flex-direction: column;
-                padding: 80px 5vw 100px;
+                padding: 80px 5vw 120px;
                 overflow: visible;
             }
 
@@ -1334,7 +1396,7 @@
                 targetScrollLeft += delta * 1.5;
             }
             // else: allow native behavior (scroll page) — do nothing
-        }, { passive: false });
+        }, { passive: true });
 
         // Seamless infinite loop with elastic bounce at start
         const originalTrackWidth = track.scrollWidth;
@@ -1649,6 +1711,7 @@
                 if (ev.key === 'Escape') closeNav();
             });
         })();
+
         // helper: convert many YouTube URL forms to an /embed/ URL
         function getYouTubeEmbed(url) {
             if (!url) return null;
