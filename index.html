@@ -145,23 +145,18 @@
             overflow-x: auto;
             overflow-y: hidden;
             -webkit-overflow-scrolling: touch;
-        }
-
-        .timeline-track {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 40px;
-            align-items: center;
-        }        
+        }   
             
 
         /* Main Timeline Line with Animated Pulse */
+        /* Timeline Line: center precisely */
         .timeline-line {
             position: absolute;
             top: 50%;
             left: 0;
             right: 0;
             height: 2px;
+            transform: translateY(-50%); /* ensure exact vertical centering */
             background: linear-gradient(90deg, 
                 #DC143C 0%, 
                 #1a1a1a 25%, 
@@ -203,6 +198,20 @@
             align-items: center;
             position: relative;
             z-index: 10;
+            height: 100% ;           /* match wrapper height */
+        }
+
+        /* Timeline Moments with Beads */
+        /* Make each timeline moment stretch to the wrapper height so bead top:50% aligns with the timeline line */
+        .timeline-moment {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;      /* key: match the wrapper/track height */
+            min-height: 0;
+            justify-content: center;
+            padding: 0 12px;
         }
 
         /* Hide the loop marker - we don't need it anymore */
@@ -214,23 +223,29 @@
         .decade-marker {
             position: relative;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            align-items: center;   /* vertical center so label sits on the timeline line */
             justify-content: center;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 0 6px;
+            z-index: 5;
         }
 
         .decade-line {
             width: 1px;
             height: 80px;
             background: #ddd;
+            display: block;
             position: relative;
+            margin: 0;
+            z-index: 2;
         }
 
         .decade-label {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -62%);  /* center over the decade-line */
             font-size: 12px;
             font-weight: 600;
             color: #1a1a1a;
@@ -241,23 +256,18 @@
             border-radius: 4px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             border: 1px solid #e0e0e0;
+            z-index: 30;
+            pointer-events: auto;
         }
 
-        /* Timeline Moments with Beads */
-        .timeline-moment {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Bead System */
+        /* Bead container: keep bead centered relative to the parent moment (which will now match wrapper height) */
         .bead-container {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 20;
+            pointer-events: none;
         }
 
         .bead {
@@ -787,22 +797,27 @@
             }
 
             .timeline-wrapper {
-                height: auto;
+                position: static !important;
+                top: auto !important;
+                min-width: 0 !important;
+                height: auto !important;
                 min-height: 100vh;
+                overflow: visible !important;
+                padding: 72px 4vw 120px;
                 flex-direction: column;
-                padding: 80px 5vw 120px;
-                overflow: visible;
+                align-items: stretch;
             }
 
             .timeline-line {
-                /* Vertical timeline line on mobile */
-                top: 0;
-                bottom: 0;
-                left: 50%;
-                right: auto;
-                width: 2px;
-                height: auto;
-                transform: translateX(-50%);
+                /* Vertical timeline line on mobile - FIXED positioning */
+                position: absolute !important;
+                top: 0 !important;
+                bottom: 0 !important;
+                left: 50% !important;
+                right: auto !important;
+                width: 2px !important;
+                height: 100% !important;
+                transform: translateX(-50%) translateY(0) !important;
             }
 
             .timeline-line::after {
@@ -822,10 +837,12 @@
                 }
             }
 
+            /* make the track full-width and stacked */
             .timeline-track {
-                flex-direction: column;
-                gap: 60px;
                 width: 100%;
+                flex-direction: column;
+                gap: 36px;
+                padding: 0;
             }
 
             /* Hide cloned track on mobile */
@@ -833,21 +850,49 @@
                 display: none;
             }
 
+            /* ensure each moment fills the viewport width (override inline widths) */
+            .timeline-moment {
+                width: 100% !important;
+                max-width: 100% !important;
+                position: relative !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                min-height: auto !important;
+                padding: 40px 0 !important;
+            }
+            /* cards & images become fluid */
+            .timeline-card,
+            .timeline-image,
+            .poster-card,
+            .poster-image {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 16px auto;
+                left: auto !important;
+                right: auto !important;
+                transform: none !important;
+                z-index: 35;
+            }
+
             /* Decade markers - horizontal on mobile */
             .decade-marker {
                 width: 100% !important;
                 flex-direction: row;
                 justify-content: center;
+                z-index: 6;
             }
 
             .decade-line {
                 width: 80px;
                 height: 1px;
+                z-index: 2;
             }
 
             .decade-label {
                 position: static;
                 transform: none;
+                z-index: 35;
             }
 
             /* Timeline moments - stack vertically */
@@ -859,17 +904,19 @@
 
             /* Beads - centered on vertical line */
             .bead-container {
-                left: 50%;
-                top: 0;
-                transform: translateX(-50%);
+                position: absolute !important;
+                left: 50% !important;
+                top: 20px !important;
+                transform: translateX(-50%) !important;
             }
 
             .connector-line.top {
-                display: none;
+                display: none !important;
             }
 
             .connector-line.bottom {
-                height: 40px;
+                height: 50px !important;
+                top: 14px !important;
             }
 
             /* Cards and images - reset positioning */
@@ -880,6 +927,10 @@
                 max-width: 500px;
                 margin: 40px auto 0;
             }
+
+            /* add explicit vertical spacing so they don't look glued together */
+            .timeline-card { margin: 18px auto !important; }
+            .timeline-image { margin: 12px auto 8px !important; }
 
             .timeline-moment.top .timeline-card,
             .timeline-moment.bottom .timeline-card {
@@ -923,7 +974,14 @@
                 padding: 10px 20px;
                 font-size: 11px;
             }
-        }
+            /* reduce large fixed heights so content fits without zoom */
+            .timeline-image { height: auto; min-height: 180px; }
+            .story-hero { height: auto; min-height: 160px; }
+
+            /* keep nav usable and above content */
+            .nav-toggle-container { top: 10px; left: 10px; }
+            .nav-toggle { width: 52px; height: 52px; }
+                }
 
         /* Footer */
        /* Low-profile fixed footer */
@@ -952,7 +1010,6 @@
            margin: 0 auto;
        }
        .site-footer h4 { font-size: 14px; margin-bottom: 12px; font-weight:600; color: #fff; }
-       .site-footer p, .site-footer a { color: rgba(255,255,255,0.95); text-decoration:none; font-size:12px; line-height:1.6; }
        .site-footer p, .site-footer a { color: rgba(255,255,255,0.9); text-decoration:none; font-size:12px; line-height:1.4; margin:0; }
        .site-footer .quick-links { display:flex; gap:12px; align-items:center; }
        .site-footer .quick-links a { font-weight:400; opacity:0.95; }
@@ -1012,9 +1069,9 @@
     </div>
 
     <div class="timeline-wrapper" id="timelineWrapper">
-        <div class="timeline-line"></div>
-        
         <div class="timeline-track">
+        
+        <div class="timeline-line"></div>
             
             <!-- Decade Marker: 1950s -->
             <div class="decade-marker" style="width: 150px;">
@@ -1346,8 +1403,8 @@
     <script>
         const wrapper = document.getElementById('timelineWrapper');
         const track = document.querySelector('.timeline-track');
-        const cards = document.querySelectorAll('.timeline-card');
-        const images = document.querySelectorAll('.timeline-image');
+        //const cards = document.querySelectorAll('.timeline-card');
+        //const images = document.querySelectorAll('.timeline-image');
         const modal = document.getElementById('storyModal');
         const storyBody = document.getElementById('storyBody');
 
@@ -1386,8 +1443,8 @@
 
             // 2) If we're in mobile/vertical mode, let native vertical scrolling happen.
             //    Adjust the matchMedia breakpoint to match your vertical-mode breakpoint if different.
-            const isVerticalMode = window.matchMedia('(max-width: 768px)').matches || document.body.classList.contains('vertical-scroll');
-            if (isVerticalMode) return;
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            if (isMobile) return; // Let native vertical scroll work on mobile
 
             // 3) If the pointer is over the timeline area -> capture and do horizontal scroll.
             if (timelineWrapper && timelineWrapper.contains(e.target)) {
@@ -1447,6 +1504,11 @@
             
             // Apply the scroll position
             window.scrollTo({ left: targetScrollLeft, behavior: 'auto' });
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            if (isMobile) {
+                requestAnimationFrame(checkInfiniteLoop);
+                return;
+            }
             
             requestAnimationFrame(checkInfiniteLoop);
         }
